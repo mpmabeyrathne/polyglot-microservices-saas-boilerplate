@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package saas;
+
+// Windows සහ Go වල import path ප්‍රශ්න නැති වෙන්න කෙලින්ම Full Path එක දෙමු
+option go_package = "go-worker/pb";
+
+// 1. GO WORKER SERVICE: ලොකු ෆයිල්ස් ප්‍රොසෙස් කරන සේවාව
+service DataProcessor {
+  rpc ProcessCSV (FileRequest) returns (JobResponse);
+}
+
+// 2. PYTHON AI SERVICE: Gemini AI කනෙක්ෂන් එක හසුරුවන සේවාව
+service AIEngine {
+  rpc GenerateSmartData (PromptRequest) returns (AIResponse);
+}
+
+// ---- DATA STRUCTURES (MESSAGES) ----
+
+message FileRequest {
+  string file_path = 1;
+  string user_id = 2;
+}
+
+message JobResponse {
+  string job_id = 1;
+  string status = 2;
+  int32 records_processed = 3;
+}
+
+message PromptRequest {
+  string prompt = 1;
+  string context_schema = 2;
+}
+
+message AIResponse {
+  string generated_json = 1;
+  string tokens_used = 2;
+}
